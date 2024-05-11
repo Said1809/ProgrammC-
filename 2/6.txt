@@ -1,0 +1,39 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdlib> // Для использования функции abs()
+int main() {
+    std::ifstream file("f.txt"); // Открытие файла для чтения
+    if (!file.is_open()) {
+        std::cerr << "Не удалось открыть файл." << std::endl;
+        return 1;
+    }
+    double number;
+    std::vector<double> numbers;
+    // Чтение чисел из файла
+    while (file >> number) {
+        numbers.push_back(number);
+    }
+    file.close();
+    double max_odd_index_value = 0; // Переменная для хранения максимального модуля
+    // Поиск максимального модуля среди компонент с нечетными индексами
+    for (size_t i = 0; i < numbers.size(); i += 2) { // Индексы 0, 2, 4, ... являются нечетными позициями в файле
+        double abs_value = std::abs(numbers[i]); // Модуль числа
+        if (abs_value > max_odd_index_value) {
+            max_odd_index_value = abs_value;
+        }
+    }
+    // Вывод результата
+    std::cout << "Наибольшее значение модуля среди компонент с нечетными номерами: "
+              << max_odd_index_value << std::endl;
+    // Сохранение результата в новый файл
+    std::ofstream result_file("result.txt");
+    if (!result_file.is_open()) {
+        std::cerr << "Не удалось создать файл для записи результатов." << std::endl;
+        return 1;
+    }
+    result_file << max_odd_index_value;
+    result_file.close();
+
+    return 0;
+}
